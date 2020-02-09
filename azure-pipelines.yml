@@ -16,12 +16,28 @@ steps:
 
 - task: DotNetCoreCLI@2
   inputs:
-    command: publish
-    publishWebProjects: True
-    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    command: 'restore'
+    projects: '**/*.csproj'
+    feedsToUse: 'select'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
     zipAfterPublish: false
+
 - task: PublishBuildArtifacts@1
   inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
-    artifactName: 'Production2'
-
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'Prod2-artiifacts'
+    publishLocation: 'Container'
