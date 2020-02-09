@@ -39,7 +39,7 @@ steps:
 - task: CopyPublishBuildArtifacts@1
   inputs:
     ArtifactName: 'Prod2-artiifacts'
-    ArtifactType: 'Container'
+    
 
 - task: PublishBuildArtifacts@1
   inputs:
