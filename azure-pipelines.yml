@@ -36,15 +36,22 @@ steps:
     publishWebProjects: true
     zipAfterPublish: false
 
-- task: CopyPublishBuildArtifacts@1
+
+- script: ./buildSomething.sh
+- task: CopyFiles@2
   inputs:
-    CopyRoot: '$(system.defaultworkingdirectory)'
-    Contents: '**\bin\Debug|**'
-    ArtifactName: 'Prod2-artiifacts'
+    contents: '_buildOutput/**'
+    targetFolder: $(Build.ArtifactStagingDirectory)
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: $(Build.ArtifactStagingDirectory)
+    artifactName: MyBuildOutputs
+
 
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'Prod2-artiifacts'
     publishLocation: 'Container'
+
 
