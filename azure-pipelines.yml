@@ -38,8 +38,9 @@ steps:
 
 - task: CopyPublishBuildArtifacts@1
   inputs:
+    CopyRoot: '$(system.defaultworkingdirectory)'
+    Contents: '**\bin\Debug|**'
     ArtifactName: 'Prod2-artiifacts'
-    
 
 - task: PublishBuildArtifacts@1
   inputs:
