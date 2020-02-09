@@ -12,6 +12,7 @@ pool:
 variables:
   buildConfiguration: 'Release'
 
+
 steps:
 
 - task: DotNetCoreCLI@2
@@ -19,39 +20,29 @@ steps:
     command: 'restore'
     projects: '**/*.csproj'
     feedsToUse: 'select'
-
 - task: DotNetCoreCLI@2
   inputs:
-    command: 'build'
+    command: 'restore'
     projects: '**/*.csproj'
+    feedsToUse: 'select'
+
 
 - task: DotNetCoreCLI@2
   inputs:
     command: 'test'
     projects: '**/*.csproj'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+
 
 - task: DotNetCoreCLI@2
   inputs:
-    command: 'publish'
-    publishWebProjects: true
+    command: publish
+    publishWebProjects: True
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: false
 
-
-- script: ./buildSomething.sh
-- task: CopyFiles@2
-  inputs:
-    contents: '_buildOutput/**'
-    targetFolder: $(Build.ArtifactStagingDirectory)
+# this code takes all the files in $(Build.ArtifactStagingDirectory) and uploads them as an artifact of your build.
 - task: PublishBuildArtifacts@1
   inputs:
-    pathToPublish: $(Build.ArtifactStagingDirectory)
-    artifactName: MyBuildOutputs
-
-
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'Prod2-artiifacts'
-    publishLocation: 'Container'
-
-
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+    artifactName: 'production2Artifacts'
